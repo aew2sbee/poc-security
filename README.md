@@ -18,3 +18,11 @@ pnpm add express
 ```bash
 npx tsx src/server.ts
 ```
+
+
+## 検証
+### 同一オリジンからのアクセス
+http://localhost:3001/attacker.html
+
+### 異なるオリジンからのアクセス
+http://site.localhost:3001/attacker.html
