@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+      <meta charset="UTF-8">
+      <title>attack.example</title>
+      <script>
+        function load() {
+          // ユーザ-情報を読み取る
+          const userInfoElement = frm.document.getElementById('user-info');
+          // ユーザ-情報の文字列をログに出力
+          console.log(userInfoElement.textContent);
+        }
+      </script>
+  </head>
+  <body>
+    <div onload="load()"></div>
+    <iframe
+      name="frm"
+      onload="load()"
+      src="http://localhost:3001/user.html"
+      width="80%"
+      height="250"
+    />
+  </body>
+</html>
