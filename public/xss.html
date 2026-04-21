@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>XSS検証用ページ</title>
+  </head>
+  <body>
+    <h1>XSS検証用ページ</h1>
+    <div id="result"></div>
+    <a id="link" href="#">ここをクリックしてXSS攻撃を試す</a>
+
+    <script>
+      const url = new URL(window.location.href);
+      const mesege = url.searchParams.get('message');
+      if (mesege) {
+        // XSS脆弱性の検証: innerHTMLはHTMLとして解釈されるため、スクリプトが実行される
+        // 安全な実装では textContent を使うこと
+        document.getElementById('result').innerHTML = mesege;
+      }
+    </script>
+  </body>
+</html>
