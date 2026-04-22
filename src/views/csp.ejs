@@ -7,10 +7,28 @@
   <body>
     <!-- サーバーから渡されたnonce値をscriptタグに付与し、CSPヘッダーのnonce値と一致させることで実行を許可する -->
     <script nonce="<%= nonce %>">
+      // Trusted Types APIが利用可能か確認する（ブラウザがサポートしている場合のみ実行）
+      if (window.trustedTypes && window.trustedTypes.createPolicy) {
+        // Trusted Typesポリシーを作成し、スクリプトURLの生成ルールを定義する
+        const policy = trustedTypes.createPolicy('script-url', {
+          createScriptURL: (str) => {
+            // 指定されたURLが同一オリジンかを検証する
+            const url = new URL(str, location.origin);
+            if (url.origin !== location.origin) {
+              // 外部オリジンのスクリプトはブロックする
+              throw new Error('外部スクリプトの読み込みは許可されていません');
+            }
+            return url;
+          },
+        });
+        // ポリシーを通じて安全なスクリプトURLを生成し、動的にスクリプトを読み込む
+        const script = document.createElement('script');
+        script.src = policy.createScriptURL('./csp-test.js');
+        // Uncaught Error: 外部スクリプトの読み込みは許可されていません
+        // script.src = policy.createScriptURL('https://site.example.com:3000/csp-test.js');
+        document.body.appendChild(script);
+      }
       // alert('hello, CSP!');
-      const script = document.createElement('script');
-      script.src = './csp-test.js';
-      document.body.appendChild(script);
     </script>
   </body>
 </html>

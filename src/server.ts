@@ -21,7 +21,9 @@ app.get('/csp', (req: express.Request, res: express.Response) => {
       // object-src: object/embed/appletタグの読み込みを全て禁止し、プラグイン経由の攻撃を防ぐ
       `object-src 'none';` +
       // base-uri: baseタグの使用を禁止し、相対URLの書き換えによる攻撃を防ぐ
-      `base-uri 'none';`,
+      `base-uri 'none';` +
+      // report-trusted-types: Trusted Typesポリシー違反を報告する
+      `report-trusted-types 'script'`,
   );
   res.render('csp', { nonce: nonceValue });
 });
