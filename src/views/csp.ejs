@@ -5,7 +5,8 @@
     <title>CSP検証用ページ</title>
   </head>
   <body>
-    <script>
+    <!-- サーバーから渡されたnonce値をscriptタグに付与し、CSPヘッダーのnonce値と一致させることで実行を許可する -->
+    <script nonce="<%= nonce %>">
       alert('hello, CSP!');
     </script>
   </body>
