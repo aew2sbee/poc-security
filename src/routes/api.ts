@@ -7,7 +7,6 @@ const ALLOW_ORIGIN_LIST = [
 ];
 
 router.use((req: Request, res: Response, next: Function) => {
-
   // CORSを許可するオリジンを http://localhost:3001 に限定する
   // （リクエスト元 → リクエスト先）
   // OK： http://localhost:3001 → このAPI … オリジンが一致するため許可
@@ -32,8 +31,10 @@ router.get('/', (req: Request, res: Response) => {
   // レスポンスヘッダーに現在の日時（ISO形式）を「X-timestamp」として付与する
   res.setHeader('X-timestamp', new Date().toISOString());
   let message = req.query.message as string | '';
-  // リクエストヘッダーから「x-language」の値を取得する（文字列またはデフォルト値'ja'として扱う）
-  const lang = req.headers['x-language'] as string | 'ja';
+  // リクエストヘッダーから「Accept-Language」の値を取得し、言語を判定する（デフォルトは'ja'）
+  const acceptLanguage = req.headers['accept-language'] || '';
+  const lang = acceptLanguage.includes('en') ? 'en' : 'ja';
+  console.log(`Accept-Language: ${acceptLanguage}, lang: ${lang}`);
 
   // messageが空または未指定の場合、ステータス400（Bad Request）を返し、言語に応じたエラーメッセージを設定する
   if (!message || message === '') {
@@ -44,6 +45,7 @@ router.get('/', (req: Request, res: Response) => {
       message = '文字列が空です';
     }
   }
+  res.setHeader('Content-Language', lang);
   res.send({ message });
 });
 
