@@ -11,11 +11,12 @@
 
     <script>
       const url = new URL(window.location.href);
-      const mesege = url.searchParams.get('message');
-      if (mesege) {
+      const urlStr = url.searchParams.get('url');
+      if (urlStr) {
         // XSS脆弱性の検証: innerHTMLはHTMLとして解釈されるため、スクリプトが実行される
         // 安全な実装では textContent を使うこと
-        document.getElementById('result').innerHTML = mesege;
+        const linkUrl = new URL(urlStr, url.origin);
+        document.querySelector('#link').href = linkUrl;
       }
     </script>
   </body>
